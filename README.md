@@ -2,7 +2,7 @@
 
 A cybersecurity project demonstrating a Session Hijacking attack in a controlled and isolated virtual lab environment.
 
-The project focuses on understanding how insecure HTTP communication can expose session cookies and how attackers may reuse a captured session identifier to impersonate a legitimate user.
+The project focuses on understanding how insecure HTTP communication can expose session cookies and how a captured session identifier can be reused to impersonate a legitimate user.
 
 ---
 
@@ -10,138 +10,77 @@ The project focuses on understanding how insecure HTTP communication can expose 
 
 Session Hijacking is a web security attack in which an attacker captures or steals a valid user session identifier and uses it to impersonate the legitimate user.
 
-In this project, the attack was demonstrated using a vulnerable web application hosted on Metasploitable. The victim accessed the application over HTTP while network traffic was monitored using Wireshark.
+In this project, Session Hijacking was demonstrated in an isolated virtual lab using Kali Linux, Wireshark, ARP spoofing, and a vulnerable web application hosted on Metasploitable.
 
-The experiment demonstrated how a PHP session cookie can be captured from unencrypted HTTP traffic and reused by an attacker.
+The victim accessed DVWA using HTTP, allowing the session cookie to be captured from the network traffic and reused in the attacker browser.
 
 ---
 
 ## 🎯 Objectives
 
-- Understand the concept of Session Hijacking.
-- Understand how web sessions and session cookies work.
-- Demonstrate Session Hijacking in a controlled lab environment.
-- Capture HTTP traffic using Wireshark.
-- Analyze session cookies transmitted over HTTP.
-- Understand the security risks of using HTTP instead of HTTPS.
-- Explore methods for preventing Session Hijacking attacks.
+- Understand how Session Hijacking works.
+- Analyze insecure HTTP communication.
+- Capture and analyze HTTP traffic using Wireshark.
+- Demonstrate the risks of exposed session cookies.
+- Understand how ARP spoofing can be used in a controlled lab to intercept traffic.
+- Demonstrate session reuse using a captured session identifier.
+- Identify security measures that can help prevent Session Hijacking.
 
 ---
 
 ## 🧪 Lab Environment
 
-The experiment was conducted using three virtual machines connected through an isolated virtual network using Oracle VM VirtualBox.
+The experiment was conducted using three virtual machines connected through an isolated virtual network.
 
-### Virtual Machines
+| Device | Role | Operating System |
+|---|---|---|
+| Kali Linux | Attacker | Kali Linux |
+| Kali Linux | Victim | Kali Linux |
+| Metasploitable 2 | Vulnerable Web Server | Metasploitable Linux |
 
-- Kali Linux – Attacker
-- Kali Linux – Victim
-- Metasploitable – Vulnerable Web Server
+### Network
 
-### Vulnerable Web Application
+All virtual machines were connected to the same isolated network using Oracle VM VirtualBox.
 
-- Damn Vulnerable Web Application (DVWA)
-- Communication protocol: HTTP
+> ⚠️ The experiment was performed only in a controlled lab environment for educational purposes.
 
 ---
 
 ## 🛠️ Tools Used
 
 | Tool | Purpose |
-|------|---------|
-| Kali Linux | Attack and security testing environment |
-| Wireshark | Network traffic capture and analysis |
-| ARP Spoofing | Intercepting traffic within the controlled lab |
-| Metasploitable | Vulnerable server environment |
+|---|---|
+| Kali Linux | Attacker and victim operating system |
+| Metasploitable 2 | Vulnerable web server |
 | DVWA | Vulnerable web application |
-| Oracle VM VirtualBox | Virtual lab environment |
+| Wireshark | Network traffic capture and analysis |
+| ARP Spoofing | Intercepting traffic in the isolated lab |
+| Firefox | Accessing the vulnerable web application |
+| Oracle VM VirtualBox | Running the virtual lab |
 
 ---
 
-## 🔎 Attack Demonstration
+## 🔄 Attack Workflow
 
-The experiment followed these main stages:
-
-1. Set up the virtual machines in an isolated network.
-2. Identify the IP addresses of the lab devices.
-3. Test connectivity between the machines.
-4. Access DVWA through HTTP from the victim machine.
-5. Capture HTTP traffic using Wireshark.
-6. Perform ARP spoofing from the Kali Linux attacker machine.
-7. Analyze the captured HTTP traffic.
-8. Identify the `PHPSESSID` session cookie.
-9. Demonstrate the reuse of the captured session cookie from the attacker browser.
-
-> ⚠️ This demonstration was performed only inside a controlled and isolated virtual laboratory for educational purposes.
-
----
-
-## 📡 Wireshark Analysis
-
-Wireshark was used to capture and analyze HTTP traffic between the lab devices.
-
-The captured traffic demonstrated that when HTTP is used without encryption, session cookies such as `PHPSESSID` may be visible in the network traffic.
-
-This allowed the experiment to demonstrate the security risk of transmitting session information over an unencrypted connection.
-
----
-
-## 📊 Results
-
-The experiment successfully demonstrated that:
-
-- HTTP traffic can expose sensitive session information.
-- The `PHPSESSID` cookie was visible in captured HTTP traffic.
-- The captured session cookie could be reused in the attacker browser.
-- The attacker was able to access the victim's session without knowing the victim's password.
-- No HTTPS/TLS traffic was detected because DVWA was running over HTTP only.
-
----
-
-## 🛡️ Prevention Methods
-
-The project discusses several methods that can help reduce the risk of Session Hijacking:
-
-- Use HTTPS instead of HTTP.
-- Enable the `Secure` cookie flag.
-- Enable the `HttpOnly` cookie flag.
-- Use appropriate session expiration policies.
-- Regenerate session IDs after login.
-- Improve network security.
-- Use Multi-Factor Authentication (MFA).
-- Apply proper session management practices.
-
----
-
-## ⚖️ Ethical and Safety Considerations
-
-This project was performed strictly for educational purposes in a private virtual laboratory.
-
-The following rules were followed:
-
-- No public websites were targeted.
-- No real user accounts were used.
-- No university or public network was attacked.
-- The experiment was limited to virtual machines owned by the students.
-- The attack was stopped after completing the required experiment.
-- The results were used only for academic reporting.
-
-Session Hijacking techniques should only be performed in authorized and controlled environments.
-
----
-
-## 📸 Screenshots
-
-Screenshots demonstrating the lab setup, traffic capture, session cookie capture, and attack results are available in the `screenshots` folder.
-
----
-
-## 📚 References
-
-- OWASP – Session Management Cheat Sheet
-- OWASP – Web Security Testing Guide
-- Wireshark Documentation
-- Kali Linux Documentation
-- Metasploitable Documentation
-- PortSwigger Web Security Academy
-- MITRE ATT&CK – Adversary-in-the-Middle (T1557)
+```text
+Victim
+   │
+   │ HTTP Request
+   ▼
+DVWA / Metasploitable
+   │
+   │ HTTP Traffic
+   ▼
+ARP Spoofing
+   │
+   ▼
+Attacker
+   │
+   ▼
+Wireshark
+   │
+   ▼
+Session Cookie Captured
+   │
+   ▼
+Session Reused
